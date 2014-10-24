@@ -1,30 +1,28 @@
 package client;
 
-import java.io.BufferedOutputStream;
+import gui.CardFrame;
+
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class ClientConnection {
+public class ClientConnection extends Thread {
+	private CardFrame      frame;
+	private PrintWriter    out;
+	private BufferedReader in;
+	
 	public ClientConnection(String address, int port) {
 		try {
 			Socket connection = new Socket(address, port);
 			System.out.println("Connected to the server!");
 			
-			BufferedOutputStream bos = new BufferedOutputStream(connection.getOutputStream());
-			/** Instantiate an OutputStreamWriter object with the optional character
-			 * encoding.
-			 */
-			OutputStreamWriter osw = new OutputStreamWriter(bos, "US-ASCII");
+			frame = new CardFrame(this);
 			
-			String TimeStamp = new java.util.Date().toString();
-		    String process = "Calling the Socket Server on "+ address + " port " + port + " at " + TimeStamp +  (char) 13;
-		    
-		    /** Write across the socket connection and flush the buffer */
-		    //osw.write(process);
-		    //osw.flush();
-		      
+			out = new PrintWriter(connection.getOutputStream(), true);;
+			in  = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -32,5 +30,36 @@ public class ClientConnection {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void sendMessage(String message) {
+		System.out.println("Sending message - " + message);
+		out.println(message);
+	}
+	
+	public void run() {
+		String message;
+		try {
+			while ((message = in.readLine()) != null) {
+				frame.addMessage(message);
+				
+				
+				
+				
+				try {
+					System.out.println("Beep");
+					//frame.addMessage("Beep");
+					sleep(10);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		System.out.println("We're done here..");
 	}
 }

@@ -12,11 +12,21 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import client.ClientConnection;
+
 public class CardFrame extends JFrame {
 	private JTextArea messageLog;
 	private JTextField messageInput;
 	
-	public CardFrame() {
+	private ClientConnection client;
+	
+	
+	private String username;
+	private static int clientNumber = 0;
+	
+	public CardFrame(ClientConnection c) {
+		client = c;
+		username = "Client" + clientNumber++;
 		setupFrame();
 	}
 	
@@ -33,8 +43,8 @@ public class CardFrame extends JFrame {
         	public void actionPerformed(ActionEvent e) {
         		String message = messageInput.getText();
         		if (message.length() > 0) {
-        			String username = "Username";
-        			addMessage(username + ": " + message);
+        			//addMessage(username + ": " + message);
+        			client.sendMessage(username + ": " + message);
         			messageInput.setText("");
         		}
         	}

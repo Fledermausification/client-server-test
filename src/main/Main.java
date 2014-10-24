@@ -4,6 +4,7 @@ import game.Card;
 import game.Deck;
 import server.Server;
 import client.ClientConnection;
+import gui.CardFrame;
 
 public class Main {
 	public static void main(String[] args) {
@@ -17,6 +18,10 @@ public class Main {
 			Card c = d.draw();
 			System.out.println(i++ + ": " + c);
 		}
+		
+		
+		
+		CardFrame cf = new CardFrame();
 		
 		
 		

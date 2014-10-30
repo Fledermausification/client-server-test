@@ -9,20 +9,20 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class ClientConnection extends Thread {
+public class Client extends Thread {
 	private CardFrame      frame;
-	private PrintWriter    out;
 	private BufferedReader in;
+	private PrintWriter    out;
 	
-	public ClientConnection(String address, int port) {
+	public Client(String address, int port, String username) {
 		try {
 			Socket connection = new Socket(address, port);
 			System.out.println("Connected to the server!");
 			
-			frame = new CardFrame(this);
+			frame = new CardFrame(this, username);
 			
-			out = new PrintWriter(connection.getOutputStream(), true);;
 			in  = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			out = new PrintWriter(connection.getOutputStream(), true);;
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -42,18 +42,6 @@ public class ClientConnection extends Thread {
 		try {
 			while ((message = in.readLine()) != null) {
 				frame.addMessage(message);
-				
-				
-				
-				
-				try {
-					System.out.println("Beep");
-					//frame.addMessage("Beep");
-					sleep(10);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

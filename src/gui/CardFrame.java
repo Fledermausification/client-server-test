@@ -12,21 +12,21 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import client.ClientConnection;
+import client.Client;
 
 public class CardFrame extends JFrame {
 	private JTextArea messageLog;
 	private JTextField messageInput;
 	
-	private ClientConnection client;
+	private Client client;
 	
 	
 	private String username;
 	private static int clientNumber = 0;
 	
-	public CardFrame(ClientConnection c) {
+	public CardFrame(Client c, String u) {
 		client = c;
-		username = "Client" + clientNumber++;
+		username = u;
 		setupFrame();
 	}
 	

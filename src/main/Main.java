@@ -1,7 +1,7 @@
 package main;
 
 import server.Server;
-import client.ClientConnection;
+import client.Client;
 
 public class Main {
 	public static void main(String[] args) {
@@ -25,7 +25,7 @@ public class Main {
 		    
 		}
 		else if (args[0].equals("-client")) {
-			new ClientConnection("localhost", 1234).start();
+			new Client("localhost", 1234, "Client" + (int)(Math.random() * 1000)).start();
 		}
 	}
 }

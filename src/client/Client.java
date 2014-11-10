@@ -29,6 +29,7 @@ public class Client extends Thread {
 			
 			in  = new ObjectInputStream(socket.getInputStream());
 			out = new ObjectOutputStream(socket.getOutputStream());
+			out.flush();
 			
 			//Tell the server you've connected!
 			out.writeObject(new ChatObject(username, " has connected", ChatObjectType.CONNECT));
@@ -46,6 +47,7 @@ public class Client extends Thread {
 	public void writeChatObject(ChatObject co) {
 		try {
 			out.writeObject(co);
+			out.flush();
 		} catch (IOException e) {
 			System.out.println("Could not write ChatObject from " + username);
 			e.printStackTrace();

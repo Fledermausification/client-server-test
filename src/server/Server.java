@@ -96,6 +96,7 @@ public class Server {
             try {
             	//If out isn't declared first then in will fail... That's kinda odd...
 	            out = new ObjectOutputStream(s.getOutputStream());
+	            out.flush();
 				in  = new ObjectInputStream(s.getInputStream());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -109,6 +110,7 @@ public class Server {
 		public void writeChatObject(ChatObject co) {
 			try {
 				out.writeObject(co);
+				out.flush();
 			} catch (IOException e) {
 				System.out.println("Could not write ChatObject to " + username);
 				e.printStackTrace();

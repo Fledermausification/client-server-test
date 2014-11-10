@@ -1,31 +1,41 @@
 package main;
 
-import server.Server;
-import client.Client;
+import game.Card;
+import game.Deck;
+import game.Suit;
+import game.Value;
 
 public class Main {
 	public static void main(String[] args) {
-		System.out.println("Hello world!");
-		
-		/*Deck d = new Deck();
+		Deck d = new Deck();
 		System.out.println(d.size() + " cards in the deck!");
-		
+
 		int i = 1;
+		Card first = d.draw();
+		System.out.println(i++ + ": " + first);
+		Card c = null;
 		while (d.size() > 0) {
-			Card c = d.draw();
+			c = d.draw();
 			System.out.println(i++ + ": " + c);
-		}*/
+		}
+		
+		//first = new Card(Suit.HEARTS, Value.ACE);
+		//c = new Card(Suit.HEARTS, Value.ACE);
+		System.out.println("Going to compare '" + first + "' and '" + c + "'");
+		int comp = first.compareCard(c);
+		if (comp > 0) System.out.println("'" + first + "' > '" + c + "'");
+		else if (comp < 0) System.out.println("'" + first + "' < '" + c + "'");
+		else System.out.println("'" + first + "' == '" + c + "'");
+		//System.out.println("Card: " + comp);
 		
 		
 		
-		
-		
-		if (args[0].equals("-server")) {
-		    Server s = new Server(1234, 2);
+		/*if (args[0].equals("-server")) {
+		    Server s = new Server(6112, 2);
 		    
 		}
 		else if (args[0].equals("-client")) {
-			new Client("localhost", 1234, "Client" + (int)(Math.random() * 1000)).start();
-		}
+			new Client("localhost", 6112, "Client" + (int)(Math.random() * 1000)).start();
+		}*/
 	}
 }

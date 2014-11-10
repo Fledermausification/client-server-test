@@ -20,7 +20,11 @@ public enum Value {
 	
 	private int value;
 	
-	private Value(int value) {
-		this.value = value;
+	private Value(int v) {
+		value = v;
+	}
+	
+	public int compareToValue(Value v) {
+		return value - v.value;
 	}
 }

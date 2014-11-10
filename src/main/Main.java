@@ -1,5 +1,8 @@
 package main;
 
+import client.Client;
+import server.Server;
+import server.ServerConstants;
 import game.Card;
 import game.Deck;
 import game.Suit;
@@ -7,7 +10,7 @@ import game.Value;
 
 public class Main {
 	public static void main(String[] args) {
-		Deck d = new Deck();
+		/*Deck d = new Deck();
 		System.out.println(d.size() + " cards in the deck!");
 
 		int i = 1;
@@ -26,16 +29,16 @@ public class Main {
 		if (comp > 0) System.out.println("'" + first + "' > '" + c + "'");
 		else if (comp < 0) System.out.println("'" + first + "' < '" + c + "'");
 		else System.out.println("'" + first + "' == '" + c + "'");
-		//System.out.println("Card: " + comp);
+		//System.out.println("Card: " + comp);*/
 		
 		
 		
-		/*if (args[0].equals("-server")) {
-		    Server s = new Server(6112, 2);
+		if (args[0].equals("-server")) {
+		    Server s = new Server(ServerConstants.PORT_NUMBER, 2);
 		    
 		}
 		else if (args[0].equals("-client")) {
-			new Client("localhost", 6112, "Client" + (int)(Math.random() * 1000)).start();
-		}*/
+			new Client(ServerConstants.ADDRESS, ServerConstants.PORT_NUMBER, "Client" + (int)(Math.random() * 1000)).start();
+		}
 	}
 }

@@ -5,8 +5,8 @@ import java.io.Serializable;
 public class ChatObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	private String username;
-	private String message;
+	private String         username;
+	private String         message;
 	private ChatObjectType type;
 	
 	public ChatObject(String u, String m, ChatObjectType t) {

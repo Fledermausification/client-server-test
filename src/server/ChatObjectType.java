@@ -1,7 +1,9 @@
 package server;
 
 public enum ChatObjectType {
-	MESSAGE,
+	SERVER_MESSAGE,
+	USER_MESSAGE,
+	CONNECT,
 	DISCONNECT,
 	ERROR
 }

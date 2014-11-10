@@ -1,9 +1,8 @@
 package server;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -73,9 +72,9 @@ public class Server {
 		System.out.println("Server shutting down...");
 	}
 	
-	public synchronized void broadcastMessage(String message) {
+	public synchronized void broadcastMessage(ChatObject co) {
 		for (ClientThread ct : clients) {
-			ct.writeMessage(message);
+			ct.writeChatObject(co);
 		}
 	}
 	
@@ -84,41 +83,58 @@ public class Server {
 	}
 	
 	private class ClientThread extends Thread {
-		private Socket         socket;
-		private PrintWriter    out;
-		private BufferedReader in;
+		private Socket             socket;
+		private ObjectInputStream  in;
+		private ObjectOutputStream out;
+		private String             username;
 		
 		public ClientThread(Socket s) {
-			socket = s;
+			socket   = s;
+			username = "?Unknown?";
 			
 			//Create the input/output stream reader/writers
             try {
-				in  = new BufferedReader(new InputStreamReader(s.getInputStream()));
-	            out = new PrintWriter(s.getOutputStream(), true);
+            	//If out isn't declared first then in will fail... That's kinda odd...
+	            out = new ObjectOutputStream(s.getOutputStream());
+				in  = new ObjectInputStream(s.getInputStream());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
+				System.out.println("ClientThread cound not connect properly");
+				e.printStackTrace();
+				removeClient(this);
+				close();
+			}
+		}
+		
+		public void writeChatObject(ChatObject co) {
+			try {
+				out.writeObject(co);
+			} catch (IOException e) {
+				System.out.println("Could not write ChatObject to " + username);
 				e.printStackTrace();
 			}
 		}
 		
-		public void writeMessage(String message) {
-			out.println(message);
-		}
-		
 		public void run() {
 			while (true) {
-				//Wait for a message
-				String message;
 				try {
-					message = in.readLine();
-					System.out.println(message);
-					if (message != null) {
-					    broadcastMessage(message);
+					//Wait for a message
+					Object rec = in.readObject();
+					
+					if (rec instanceof ChatObject) {
+						ChatObject co = (ChatObject)rec;
+						if (co.getType().equals(ChatObjectType.CONNECT)) {
+							username = co.getUsername();
+						}
+						broadcastMessage(co);
 					}
+				} catch (ClassNotFoundException e) {
+					System.out.println("Unknown object received");
+					e.printStackTrace();
 				} catch (IOException e) {
 					removeClient(this);
 					close();
-					broadcastMessage("{Client has disconnected}");
+					broadcastMessage(new ChatObject(username, " has disconnected", ChatObjectType.DISCONNECT));
 					break;
 				}
 			}

@@ -12,6 +12,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import server.ChatObject;
+import server.ChatObjectType;
 import client.Client;
 
 public class CardFrame extends JFrame {
@@ -40,8 +42,7 @@ public class CardFrame extends JFrame {
         	public void actionPerformed(ActionEvent e) {
         		String message = messageInput.getText();
         		if (message.length() > 0) {
-        			//addMessage(username + ": " + message);
-        			client.sendMessage(username + ": " + message);
+        			client.writeChatObject(new ChatObject(username, message, ChatObjectType.USER_MESSAGE));
         			messageInput.setText("");
         		}
         	}

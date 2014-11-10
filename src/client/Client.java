@@ -2,19 +2,21 @@ package client;
 
 import gui.CardFrame;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import server.ChatObject;
+import server.ChatObjectType;
+
 public class Client extends Thread {
-	private Socket         socket;
-	private CardFrame      frame;
-	private BufferedReader in;
-	private PrintWriter    out;
-	private String         username;
+	private Socket             socket;
+	private CardFrame          frame;
+	private ObjectInputStream  in;
+	private ObjectOutputStream out;
+	private String             username;
 	
 	public Client(String address, int port, String username) {
 		try {
@@ -25,8 +27,11 @@ public class Client extends Thread {
 			
 			frame = new CardFrame(this, username);
 			
-			in  = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			out = new PrintWriter(socket.getOutputStream(), true);;
+			in  = new ObjectInputStream(socket.getInputStream());
+			out = new ObjectOutputStream(socket.getOutputStream());
+			
+			//Tell the server you've connected!
+			out.writeObject(new ChatObject(username, " has connected", ChatObjectType.CONNECT));
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -38,16 +43,40 @@ public class Client extends Thread {
 		}
 	}
 	
-	public void sendMessage(String message) {
-		out.println(message);
+	public void writeChatObject(ChatObject co) {
+		try {
+			out.writeObject(co);
+		} catch (IOException e) {
+			System.out.println("Could not write ChatObject from " + username);
+			e.printStackTrace();
+		}
 	}
 	
 	public void run() {
-		String message;
 		try {
-			while ((message = in.readLine()) != null) {
-				frame.addMessage(message);
+			Object rec;
+			while ((rec = in.readObject()) != null) {
+				if (rec instanceof ChatObject) {
+					ChatObject     co   = (ChatObject)rec;
+					ChatObjectType type = co.getType();
+					
+					if (type.equals(ChatObjectType.CONNECT) || type.equals(ChatObjectType.DISCONNECT)) {
+						frame.addMessage("- {" + co.getUsername() + co.getMessage() + "}");
+					}
+					else if (type.equals(ChatObjectType.USER_MESSAGE)) {
+						frame.addMessage(co.getUsername() +": " + co.getMessage());
+					}
+					else if (type.equals(ChatObjectType.SERVER_MESSAGE)) {
+						frame.addMessage("- {" + co.getMessage() + "}");
+					}
+					else if (type.equals(ChatObjectType.ERROR)) {
+						frame.addMessage("- {ERROR: " + co.getMessage() + "}");
+					}
+				}
 			}
+		} catch (ClassNotFoundException e) {
+			System.out.println("Unknown object received");
+			e.printStackTrace();
 		} catch (IOException e) {
 			frame.addMessage("{Your connection to the server has been lost}");
 			close();

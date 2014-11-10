@@ -1,8 +1,8 @@
 package main;
 
-import client.Client;
-import server.Server;
-import server.ServerConstants;
+import networking.Client;
+import networking.Server;
+import networking.ServerConstants;
 import game.Card;
 import game.Deck;
 import game.Suit;
@@ -34,7 +34,7 @@ public class Main {
 		
 		
 		if (args[0].equals("-server")) {
-		    Server s = new Server(ServerConstants.PORT_NUMBER, 2);
+		    Server s = new Server(ServerConstants.PORT_NUMBER, 3);
 		    
 		}
 		else if (args[0].equals("-client")) {

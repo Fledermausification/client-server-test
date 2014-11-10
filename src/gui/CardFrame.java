@@ -12,9 +12,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import server.ChatObject;
-import server.ChatObjectType;
-import client.Client;
+import networking.ChatObject;
+import networking.ChatObjectType;
+import networking.Client;
 
 public class CardFrame extends JFrame {
 	private JTextArea messageLog;

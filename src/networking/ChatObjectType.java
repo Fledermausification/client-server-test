@@ -1,4 +1,4 @@
-package server;
+package networking;
 
 public enum ChatObjectType {
 	SERVER_MESSAGE,

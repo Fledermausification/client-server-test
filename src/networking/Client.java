@@ -1,4 +1,4 @@
-package client;
+package networking;
 
 import gui.CardFrame;
 
@@ -7,9 +7,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-
-import server.ChatObject;
-import server.ChatObjectType;
 
 public class Client extends Thread {
 	private Socket             socket;
@@ -32,7 +29,7 @@ public class Client extends Thread {
 			out.flush();
 			
 			//Tell the server you've connected!
-			out.writeObject(new ChatObject(username, " has connected", ChatObjectType.CONNECT));
+			writeChatObject(new ChatObject(username, " has connected", ChatObjectType.CONNECT));
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

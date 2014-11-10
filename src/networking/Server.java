@@ -1,4 +1,6 @@
-package server;
+package networking;
+
+import game.Deck;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -21,7 +23,7 @@ public class Server {
 			
 			int i = 0;
 			
-			while (i < maxClients || i > -1) {
+			while (i < maxClients) {
 			    Socket s = ss.accept();
 	            
 	            ClientThread ct = new ClientThread(s);
@@ -33,17 +35,36 @@ public class Server {
 			
 			System.out.println("All clients connected!");
 			
-			/*for (PrintWriter p : out) {
-				p.println("SERVER MESSAGE - Let's have a clean figh- I mean game!");
-			}*/
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			//Deck d = new Deck();
+			
+			for (ClientThread ct : clients) {
+				System.out.println("Drawing cards for " + ct.username);
+				ct.writeChatObject(new ChatObject("", "All players have connected", ChatObjectType.SERVER_MESSAGE));
+				/*for (i = 0; i < 7; i++) {
+					ChatObject co = new ChatObject("", "You drew the " + d.draw(), ChatObjectType.SERVER_MESSAGE);
+					ct.writeChatObject(co);
+				}*/
+			}
 			
 			
-            /*String inputLine, outputLine;
-            while ((inputLine = in[0].readLine()) != null) {
-                outputLine = kkp.processInput(inputLine);
-                if (outputLine.equals("Bye."))
-                    break;
-            }*/
+			while (true) {
+				if (clients.isEmpty()) {
+					break;
+				}
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
             
 		} catch (IOException e) {
 			System.out.println("Exception caught when trying to listen on port " + port + " or listening for a connection");
@@ -54,18 +75,6 @@ public class Server {
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			}
-		}
-		
-		while (true) {
-			if (clients.isEmpty()) {
-				break;
-			}
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 		}
 		
@@ -98,6 +107,7 @@ public class Server {
 	            out = new ObjectOutputStream(s.getOutputStream());
 	            out.flush();
 				in  = new ObjectInputStream(s.getInputStream());
+				System.out.println("Client thread connected");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				System.out.println("ClientThread cound not connect properly");

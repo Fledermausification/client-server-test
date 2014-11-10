@@ -19,10 +19,7 @@ public class CardFrame extends JFrame {
 	private JTextField messageInput;
 	
 	private Client client;
-	
-	
 	private String username;
-	private static int clientNumber = 0;
 	
 	public CardFrame(Client c, String u) {
 		client = c;

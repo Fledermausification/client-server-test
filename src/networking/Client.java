@@ -29,7 +29,7 @@ public class Client extends Thread {
 			out.flush();
 			
 			//Tell the server you've connected!
-			writeChatObject(new ChatObject(username, " has connected", ChatObjectType.CONNECT));
+			writeObject(new ChatObject(username, " has connected", ChatObjectType.CONNECT));
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -41,12 +41,12 @@ public class Client extends Thread {
 		}
 	}
 	
-	public void writeChatObject(ChatObject co) {
+	public void writeObject(Object o) {
 		try {
-			out.writeObject(co);
+			out.writeObject(o);
 			out.flush();
 		} catch (IOException e) {
-			System.out.println("Could not write ChatObject from " + username);
+			System.out.println("Could not write Object from " + username);
 			e.printStackTrace();
 		}
 	}
@@ -71,6 +71,11 @@ public class Client extends Thread {
 					else if (type.equals(ChatObjectType.ERROR)) {
 						frame.addMessage("- {ERROR: " + co.getMessage() + "}");
 					}
+				}
+				else if (rec instanceof GameObject) {
+					GameObject     go   = (GameObject)rec;
+					GameObjectType type = go.getType();
+					//Do something with it
 				}
 			}
 		} catch (ClassNotFoundException e) {

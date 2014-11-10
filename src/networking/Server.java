@@ -46,10 +46,10 @@ public class Server {
 			
 			for (ClientThread ct : clients) {
 				System.out.println("Drawing cards for " + ct.username);
-				ct.writeChatObject(new ChatObject("", "All players have connected", ChatObjectType.SERVER_MESSAGE));
+				ct.writeObject(new ChatObject("", "All players have connected", ChatObjectType.SERVER_MESSAGE));
 				/*for (i = 0; i < 7; i++) {
 					ChatObject co = new ChatObject("", "You drew the " + d.draw(), ChatObjectType.SERVER_MESSAGE);
-					ct.writeChatObject(co);
+					ct.writeObject(co);
 				}*/
 			}
 			
@@ -81,9 +81,9 @@ public class Server {
 		System.out.println("Server shutting down...");
 	}
 	
-	public synchronized void broadcastMessage(ChatObject co) {
+	public synchronized void broadcast(Object o) {
 		for (ClientThread ct : clients) {
-			ct.writeChatObject(co);
+			ct.writeObject(o);
 		}
 	}
 	
@@ -117,12 +117,12 @@ public class Server {
 			}
 		}
 		
-		public void writeChatObject(ChatObject co) {
+		public void writeObject(Object o) {
 			try {
-				out.writeObject(co);
+				out.writeObject(o);
 				out.flush();
 			} catch (IOException e) {
-				System.out.println("Could not write ChatObject to " + username);
+				System.out.println("Could not write Object to " + username);
 				e.printStackTrace();
 			}
 		}
@@ -138,7 +138,11 @@ public class Server {
 						if (co.getType().equals(ChatObjectType.CONNECT)) {
 							username = co.getUsername();
 						}
-						broadcastMessage(co);
+						broadcast(co);
+					}
+					else if (rec instanceof GameObject) {
+						GameObject go = (GameObject)rec;
+						broadcast(go);
 					}
 				} catch (ClassNotFoundException e) {
 					System.out.println("Unknown object received");
@@ -146,7 +150,7 @@ public class Server {
 				} catch (IOException e) {
 					removeClient(this);
 					close();
-					broadcastMessage(new ChatObject(username, " has disconnected", ChatObjectType.DISCONNECT));
+					broadcast(new ChatObject(username, " has disconnected", ChatObjectType.DISCONNECT));
 					break;
 				}
 			}

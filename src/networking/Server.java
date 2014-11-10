@@ -42,15 +42,15 @@ public class Server {
 				e1.printStackTrace();
 			}
 			
-			//Deck d = new Deck();
+			Deck d = new Deck();
 			
 			for (ClientThread ct : clients) {
 				System.out.println("Drawing cards for " + ct.username);
 				ct.writeObject(new ChatObject("", "All players have connected", ChatObjectType.SERVER_MESSAGE));
-				/*for (i = 0; i < 7; i++) {
-					ChatObject co = new ChatObject("", "You drew the " + d.draw(), ChatObjectType.SERVER_MESSAGE);
-					ct.writeObject(co);
-				}*/
+				for (i = 0; i < 7; i++) {
+					GameObject go = new GameObject(d.draw(), GameObjectType.DRAW);
+					ct.writeObject(go);
+				}
 			}
 			
 			

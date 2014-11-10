@@ -42,7 +42,7 @@ public class CardFrame extends JFrame {
         	public void actionPerformed(ActionEvent e) {
         		String message = messageInput.getText();
         		if (message.length() > 0) {
-        			client.writeChatObject(new ChatObject(username, message, ChatObjectType.USER_MESSAGE));
+        			client.writeObject(new ChatObject(username, message, ChatObjectType.USER_MESSAGE));
         			messageInput.setText("");
         		}
         	}

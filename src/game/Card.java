@@ -20,6 +20,7 @@ public class Card implements Serializable {
 	}
 	
 	public String toString() {
+		if (value.equals(Value.JOKER)) return value.toString();
 		return value + " of " + suit;
 	}
 	

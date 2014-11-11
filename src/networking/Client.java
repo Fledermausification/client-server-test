@@ -43,6 +43,10 @@ public class Client extends Thread {
 		}
 	}
 	
+	public Hand getHand() {
+		return hand;
+	}
+	
 	public void writeObject(Object o) {
 		try {
 			out.writeObject(o);
@@ -80,6 +84,7 @@ public class Client extends Thread {
 					//Do something with it
 					frame.addMessage("~ {You drew a " + go.getCard() + "}");
 					hand.addCard(go.getCard());
+					frame.paintHand();
 				}
 			}
 		} catch (ClassNotFoundException e) {

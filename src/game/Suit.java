@@ -15,6 +15,21 @@ public enum Suit {
 		value = v;
 	}
 	
+	public String toString() {
+		switch (this) {
+		    case SPADES:
+		    	return "♠";
+		    case CLUBS:
+		    	return "♣";
+		    case DIAMONDS:
+		    	return "♦";
+		    case HEARTS:
+		    	return "♥";
+		    default:
+		    	return "?";
+		}
+	}
+	
 	public int compareToSuit(Suit s) {
 		return value - s.value;
 	}

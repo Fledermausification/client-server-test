@@ -50,6 +50,12 @@ public class Server {
 				for (i = 0; i < 7; i++) {
 					GameObject go = new GameObject(d.draw(), GameObjectType.DRAW);
 					ct.writeObject(go);
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 			

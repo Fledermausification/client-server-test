@@ -27,10 +27,10 @@ public class ChatPanel extends JPanel {
 	public ChatPanel(Client c, String u) {
 		client = c;
 		username = u;
-		setupFrame();
+		setupPanel();
 	}
 	
-	private void setupFrame() {
+	private void setupPanel() {
 		setPreferredSize(new Dimension(600, 600));
 		//setMinimumSize(new Dimension(600, 600));
 		//setMaximumSize(new Dimension(600, 600));

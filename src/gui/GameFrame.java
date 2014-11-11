@@ -1,20 +1,18 @@
 package gui;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.util.Calendar;
+import game.Card;
+import game.Hand;
 
-import javax.swing.BorderFactory;
+import java.awt.BorderLayout;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 
 import networking.Client;
 
 public class GameFrame extends JFrame {
-	private JTextField messageInput;
+	//private JTextField messageInput;
+	private CardPanel cardPanel;
 	private ChatPanel chatPanel;
 	
 	private Client client;
@@ -32,25 +30,32 @@ public class GameFrame extends JFrame {
 	    setLocationRelativeTo(null);
 	    setDefaultCloseOperation(EXIT_ON_CLOSE);
 	    
+	    //Setup the ChatPanel
 	    chatPanel = new ChatPanel(client, username);
         
-        messageInput = new JTextField();
-        messageInput.setDocument(new JTextFieldLimit(80));
+	    //Setup the CardPanel
+        cardPanel = new CardPanel(client, username);
+        
+        //messageInput = new JTextField();
+        //messageInput.setDocument(new JTextFieldLimit(80));
 		
+        //Setup the JPanel that holds everything in it
 		JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        //panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         
-        JPanel center = new JPanel();
-        center.setPreferredSize(new Dimension(600, 600));
-
-        panel.add(center, BorderLayout.CENTER);
-        //panel.add(messageInput, BorderLayout.SOUTH);
+        //Add everything to the JPanel
+        panel.add(cardPanel, BorderLayout.CENTER);
         panel.add(chatPanel, BorderLayout.EAST);
+        //panel.add(messageInput, BorderLayout.SOUTH);
         add(panel);
         
         pack();
 	    setVisible(true);
+	}
+	
+	public void paintHand() {
+		cardPanel.repaint();
 	}
 	
 	public void addMessage(String message) {

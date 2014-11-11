@@ -1,7 +1,7 @@
 package networking;
 
 import game.Hand;
-import gui.CardFrame;
+import gui.GameFrame;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -11,7 +11,7 @@ import java.net.UnknownHostException;
 
 public class Client extends Thread {
 	private Socket             socket;
-	private CardFrame          frame;
+	private GameFrame          frame;
 	private ObjectInputStream  in;
 	private ObjectOutputStream out;
 	private String             username;
@@ -24,7 +24,7 @@ public class Client extends Thread {
 			socket = new Socket(address, port);
 			System.out.println("Connected to the server as " + username);
 			
-			frame = new CardFrame(this, username);
+			frame = new GameFrame(this, username);
 			
 			in  = new ObjectInputStream(socket.getInputStream());
 			out = new ObjectOutputStream(socket.getOutputStream());

@@ -83,6 +83,11 @@ public class Server {
 	
 	public synchronized void broadcast(Object o) {
 		for (ClientThread ct : clients) {
+			if (o instanceof ChatObject) {
+				ChatObject co = (ChatObject)o;
+				if (co.getType().equals(ChatObjectType.CONNECT) && co.getUsername().equals(ct.username))
+					break;
+			}
 			ct.writeObject(o);
 		}
 	}

@@ -76,6 +76,7 @@ public class Client extends Thread {
 					GameObject     go   = (GameObject)rec;
 					GameObjectType type = go.getType();
 					//Do something with it
+					frame.addMessage("~ {You drew a " + go.getCard() + "}");
 				}
 			}
 		} catch (ClassNotFoundException e) {

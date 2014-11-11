@@ -1,5 +1,6 @@
 package networking;
 
+import game.Hand;
 import gui.CardFrame;
 
 import java.io.IOException;
@@ -14,11 +15,12 @@ public class Client extends Thread {
 	private ObjectInputStream  in;
 	private ObjectOutputStream out;
 	private String             username;
+	private Hand               hand;
 	
 	public Client(String address, int port, String username) {
+		this.username = username;
+		this.hand     = new Hand();
 		try {
-			this.username = username;
-			this.username = this.username + "HI";
 			socket = new Socket(address, port);
 			System.out.println("Connected to the server as " + username);
 			
@@ -77,6 +79,7 @@ public class Client extends Thread {
 					GameObjectType type = go.getType();
 					//Do something with it
 					frame.addMessage("~ {You drew a " + go.getCard() + "}");
+					hand.addCard(go.getCard());
 				}
 			}
 		} catch (ClassNotFoundException e) {

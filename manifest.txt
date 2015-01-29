@@ -1,0 +1,4 @@
+Class-Path: .
+Main-Class: main.Main
+
+
